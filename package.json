@@ -1,0 +1,43 @@
+{
+  "name": "koa-joi-bouncer",
+  "version": "0.0.5",
+  "description": "An http parameter validation library for Koa web apps",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "debug": "^2.6.0",
+    "joi": "^10.2.0"
+  },
+  "devDependencies": {
+    "eslint": "^3.14.1",
+    "eslint-config-airbnb": "^14.0.0",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-jsx-a11y": "^3.0.2",
+    "eslint-plugin-react": "^6.9.0",
+    "koa": "^1.2.4",
+    "koa-better-body": "^3.0.2",
+    "should": "^11.2.0",
+    "supertest": "^3.0.0"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/psypersky/koa-joi-bouncer.git"
+  },
+  "keywords": [
+    "koa",
+    "validator",
+    "joi",
+    "bouncer"
+  ],
+  "author": "Ruben Alcazar Alvarez",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/psypersky/koa-joi-bouncer/issues"
+  },
+  "homepage": "https://github.com/psypersky/koa-joi-bouncer#readme"
+}

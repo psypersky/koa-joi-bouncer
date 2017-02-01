@@ -1,6 +1,6 @@
 {
   "name": "koa-joi-bouncer",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "An http parameter validation library for Koa web apps",
   "main": "index.js",
   "directories": {

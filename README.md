@@ -1,8 +1,15 @@
 
-__An http parameter validation library for Koa web apps__
+# Koa-joi-bouncer
 
+__An http parameter validation library for Koa.js web apps__
 
-Usage
+`npm install --save koa-joi-bouncer`
+
+# The idea
+
+Separate the validation logic from the route itself, just define an schema and use it before the route.
+
+# Usage
 
 ```js
 const koa = require('koa');
@@ -26,7 +33,7 @@ const myRoute = function* myRouter(next) {
   this.response.body = `Hello there ${this.request.body.username}`;
 }
 
-router.post('/myroute', myRoute);
+router.post('/myroute', myRouteValidation, myRoute);
 
 app.use(function* onValidationError(next) {
   try {

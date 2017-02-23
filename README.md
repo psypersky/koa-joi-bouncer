@@ -9,6 +9,12 @@ __An http parameter validation library for Koa.js web apps__
 
 Separate the validation logic from the route itself, just define an schema and use it before the route.
 
+# Koa 2
+
+If you want to use it with koa v2 use the tag 'next'
+
+`npm install --save koa-joi-bouncer@next`
+
 # Usage
 
 ```js

@@ -60,3 +60,6 @@ Check the tests for more examples
 TODO:
 - Allow sending options to JOI
 - Allow more specification for the validation key e.g. 'request.body2'
+- Add https://david-dm.org/
+- Add https://travis-ci.org/
+- Add npm badge

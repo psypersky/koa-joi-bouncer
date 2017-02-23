@@ -1,6 +1,8 @@
 const request = require('supertest');
 const Koa = require('koa');
 const bodyParser = require('koa-better-body');
+const convert = require('koa-convert');
+const co = require('co');
 const koaJoiBouncer = require('..');
 
 const Joi = koaJoiBouncer.Joi;
@@ -10,22 +12,22 @@ describe('koa-joi', () => {
   beforeEach(() => {
     app = new Koa();
 
-    app.use(bodyParser({ fields: 'body' }));
+    app.use(convert(bodyParser({ fields: 'body' })));
 
-    app.use(function* onValidationError(next) {
+    app.use(co.wrap(function* onValidationError(ctx, next) {
       try {
-        yield next;
+        yield next();
       } catch (e) {
         if (!e.isJoi) {
           throw e;
         }
-        this.response.body = {
+        ctx.response.body = {
           status: 'fail',
           details: e.details,
         };
-        this.response.status = 400;
+        ctx.response.status = 400;
       }
-    });
+    }));
 
     app.use(koaJoiBouncer.middleware({
       body: Joi.object().keys({
@@ -45,14 +47,14 @@ describe('koa-joi', () => {
       }),
     }));
 
-    app.use(function* response(next) {
-      this.response.body = 'Hello World';
-      this.response.status = 200;
-      yield next;
-    });
+    app.use(co.wrap(function* response(ctx, next) {
+      ctx.response.body = 'Hello World';
+      ctx.response.status = 200;
+      yield next();
+    }));
   });
 
-  it('should reject an invalid request', (done) => {
+  it.only('should reject an invalid request', (done) => {
     request(app.listen())
       .post('/')
       .send({ username: 'a' })
@@ -71,15 +73,15 @@ describe('koa-joi', () => {
   });
 
   it('should parse a valid request', (done) => {
-    app.use(function* someMiddleware(next) {
+    app.use(co.wrap(function* someMiddleware(ctx, next) {
       try {
-        this.request.body.test.should.be.type('number');
+        ctx.request.body.test.should.be.type('number');
         done();
       } catch (e) {
         done(e);
       }
       yield next;
-    });
+    }));
 
     request(app.listen())
       .post('/')

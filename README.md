@@ -13,6 +13,7 @@ Separate the validation logic from the route itself, just define an schema and u
 
 ```js
 const koa = require('koa');
+const co = require('co');
 const app = new koa();
 const Router = require('koa-router');
 const koaJoiBouncer = require('koa-joi-bouncer');
@@ -29,26 +30,26 @@ const myRouteValidation = koaJoiBouncer.middleware({
   }),
 });
 
-const myRoute = function* myRouter(next) {
-  this.response.body = `Hello there ${this.request.body.username}`;
-}
+const myRoute = co.wrap(function* myRouter(ctx, next) {
+  ctx.response.body = `Hello there ${ctx.request.body.username}`;
+});
 
 router.post('/myroute', myRouteValidation, myRoute);
 
-app.use(function* onValidationError(next) {
+app.use(co.wrap(function* onValidationError(ctx, next) {
   try {
     yield next;
   } catch (e) {
     if (!e.isJoi) {
       throw e;
     }
-    this.response.body = {
+    ctx.response.body = {
       status: 'fail',
       details: e.details,
     };
-    this.response.status = 400;
+    ctx.response.status = 400;
   }
-});
+}));
 
 app.use(router.routes()).use(router.allowedMethods());
 

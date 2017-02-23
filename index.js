@@ -1,6 +1,7 @@
 
 const Joi = require('joi');
 const debug = require('debug')('koa-joi-bouncer');
+const co = require('co');
 
 const options = {
   abortEarly: false,
@@ -8,12 +9,12 @@ const options = {
 };
 
 function createValidatorMiddleware(schemas) {
-  return function* validatorMiddleware(next) {
+  return co.wrap(function* validatorMiddleware(ctx, next) {
     const validationPromises = Object.keys(schemas).map(schemaKey =>
       new Promise((resolve, reject) => {
         debug('validating ', schemaKey);
         Joi.validate(
-          this.request[schemaKey], schemas[schemaKey], options, (err) => {
+          ctx.request[schemaKey], schemas[schemaKey], options, (err) => {
             if (err) {
               reject(err);
               return;
@@ -22,8 +23,8 @@ function createValidatorMiddleware(schemas) {
           });
       }));
     yield validationPromises;
-    yield next;
-  };
+    yield next();
+  });
 }
 
 module.exports = {
